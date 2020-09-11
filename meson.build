@@ -1,12 +1,14 @@
-project('cpp-meson-app', 'cpp',
+project('lab1-chat', 'cpp',
   version : run_command('git', 'describe', '--abbrev=0', '--tags').stdout().strip(),
   default_options : ['warning_level=3',
                      'cpp_std=c++17'])
 
-group = 'com.handtruth'
-maintainer = 'someone <someone@handtruth.com>'
+group = 'ktlo'
+maintainer = 'ktlo <ktlo@handtruth.com>'
 
 modules = [
+  'ekutils',
+  'paket-cpp'
 ]
 
 ######################################
@@ -17,6 +19,10 @@ foreach module : modules
   module_deps += dependency(module, fallback : [module, 'dep'])
 endforeach
 
+cppres_proj = subproject('cpp-res', default_options : ['native_tool=true'])
+cppres_exe = cppres_proj.get_variable('exe')
+
+subdir('res')
 subdir('src')
 subdir('test')
 

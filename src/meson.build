@@ -1,5 +1,9 @@
 sources = files([
-  'sample_source.cpp'
+  'client.cpp',
+  'connection.cpp',
+  'gate.cpp',
+  'server.cpp',
+  'settings.cpp'
 ])
 
 src = include_directories('.')
@@ -13,6 +17,7 @@ sources += configure_file(output : 'config.cpp', input : 'config.cpp.in',
   'maintainer' : maintainer,
 })
 
-lib = library(meson.project_name(), sources, dependencies: module_deps)
-exe = executable(meson.project_name(), 'main.cpp', link_with : lib, install : true, dependencies : module_deps)
-run_target('run', command : [exe] + get_option('run_args'), depends : exe)
+lib = library(meson.project_name(), [sources, res_header, res_source], dependencies: module_deps)
+exe_server = executable(meson.project_name() + '-server', ['server_main.cpp', res_header], link_with : lib, install : true, dependencies : module_deps)
+exe_client = executable(meson.project_name() + '-client', ['client_main.cpp', res_header], link_with : lib, install : true, dependencies : module_deps)
+run_target('run', command : [exe_server] + get_option('run_args'), depends : exe_server)

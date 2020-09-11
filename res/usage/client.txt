@@ -1,0 +1,12 @@
+ [options]
+
+Options:
+      --address  ADDRESS   domain, ip address (tcp) or file path (unix)
+                           to connect to
+      --port PORT          tcp port (tcp only)
+      --username USERNAME  own username for chat
+      --pulse PULSE        keep alive signal period in milliseconds
+  -t, --tcp                use tcp socket
+  -u, --unix               use unix socket
+  -v, --version            show program version
+  -h, --help               print this help message
