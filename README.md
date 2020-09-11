@@ -54,7 +54,7 @@ docker run -d --net-alias chat-server ktlo/net-chat \
 Запуск кллиента через Docker:
 
 ```sh
-docker run -it ktlo/net-chat \
+rlwrap docker run -i ktlo/net-chat \
   client --address chat-server --username Kenobi
 ```
 

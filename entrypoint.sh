@@ -11,7 +11,7 @@ shift
 if [ "$name" = "server" ]; then
     lab1-chat-server "$@"
 elif [ "$name" = "client" ]; then
-    rlwrap lab1-chat-client "$@"
+    lab1-chat-client "$@"
 else
     >&2 echo 'the first argument should be either "server" or "client"'
 fi

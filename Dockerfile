@@ -1,5 +1,5 @@
 FROM alpine:latest AS base
-RUN [ "apk", "--no-cache", "--no-progress", "add", "libstdc++", "rlwrap" ]
+RUN [ "apk", "--no-cache", "--no-progress", "add", "libstdc++" ]
 
 FROM base AS build
 RUN apk --no-cache --no-progress add build-base ninja coreutils cmake git python3 py-pip \
