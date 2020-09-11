@@ -1,7 +1,8 @@
 project('lab1-chat', 'cpp',
   version : run_command('git', 'describe', '--abbrev=0', '--tags').stdout().strip(),
   default_options : ['warning_level=3',
-                     'cpp_std=c++17'])
+                     'cpp_std=c++17',
+                     'build.cpp_std=c++17'])
 
 group = 'ktlo'
 maintainer = 'ktlo <ktlo@handtruth.com>'
