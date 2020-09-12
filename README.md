@@ -66,15 +66,14 @@ rlwrap docker run -i ktlo/net-chat \
 Для сборки нам понадобятся:
 
 ```sh
-apt install -y cmake g++ python3 python3-pip ninja-build \
+apt install -y cmake g++ git python3 python3-pip ninja-build \
   && python3 -m pip install --user meson
 ```
 
 Сборка осуществляется с помощью [Meson](https://mesonbuild.com). Для сборки нужно выполнить следующую команду.
 
 ```sh
-meson build && cd build \
-  && ninja -Dbuildtype=release -Doptimization=3
+meson -Dbuildtype=release -Doptimization=3 build && cd build && ninja
 ```
 
 Для установки в операционную систему можно выполнить:
