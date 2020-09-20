@@ -1,4 +1,4 @@
-FROM alpine:latest AS base
+FROM arm32v7/alpine:latest AS base
 RUN [ "apk", "--no-cache", "--no-progress", "add", "libstdc++" ]
 
 FROM base AS build

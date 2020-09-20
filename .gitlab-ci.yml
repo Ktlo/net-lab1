@@ -7,6 +7,7 @@ stages:
   - analysis
   - package
   - image
+  - deploy
 
 variables:
   GIT_SUBMODULE_STRATEGY: normal
@@ -164,13 +165,14 @@ Package:x86_64-alpine-linux-musl:
   variables:
     TARGET: x86_64-alpine-linux-musl
 
-AlpineDockerImage:
+ImageAmd64:
   stage: image
   image: docker:stable
   variables:
     DOCKER_HOST: tcp://docker:2375/
-    LATEST_TAG: $CI_REGISTRY_IMAGE:latest
-    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    LATEST_TAG: $CI_REGISTRY_IMAGE/amd64:latest
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/amd64:$CI_COMMIT_TAG
+    GIT_STRATEGY: none
   services:
     - name: docker:dind
       entrypoint: ["dockerd", "--host=tcp://0.0.0.0:2375"]
@@ -181,6 +183,49 @@ AlpineDockerImage:
     - docker push $IMAGE_TAG
     - docker push $LATEST_TAG
   tags: ["docker"]
-  only:
-    - tags
+  only: ["tags"]
+  cache:
+    paths: []
   dependencies: []
+
+ImageArmhf:
+  stage: image
+  image: arm32v7/docker:stable
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    LATEST_TAG: $CI_REGISTRY_IMAGE/armhf:latest
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/armhf:$CI_COMMIT_TAG
+    GIT_STRATEGY: none
+  services:
+    - name: arm32v7/docker:dind
+      alias: docker
+      entrypoint: ["dockerd", "--host=tcp://0.0.0.0:2375"]
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $IMAGE_TAG -f armhf.Dockerfile .
+    - docker tag $IMAGE_TAG $LATEST_TAG
+    - docker push $IMAGE_TAG
+    - docker push $LATEST_TAG
+  tags: ["docker-armhf"]
+  only: ["tags"]
+  cache:
+    paths: []
+  dependencies: []
+
+Deploy:
+  stage: deploy
+  image: arm32v7/docker:stable
+  variables:
+    DOCKER_HOST: unix:///var/run/docker.sock
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/armhf:$CI_COMMIT_TAG
+    GIT_STRATEGY: none
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $IMAGE_TAG
+    - docker stop net-chat && docker rm net-chat || true
+    - docker run -d --name net-chat -p 1338:1338 $IMAGE_TAG server --address=0.0.0.0 --verb=verbose
+  tags: ["kuiper"]
+  only: ["tags"]
+  cache:
+    paths: []
+  dependencies: []  
