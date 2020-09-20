@@ -172,7 +172,6 @@ ImageAmd64:
     DOCKER_HOST: tcp://docker:2375/
     LATEST_TAG: $CI_REGISTRY_IMAGE/amd64:latest
     IMAGE_TAG: $CI_REGISTRY_IMAGE/amd64:$CI_COMMIT_TAG
-    GIT_STRATEGY: none
   services:
     - name: docker:dind
       entrypoint: ["dockerd", "--host=tcp://0.0.0.0:2375"]
@@ -195,7 +194,6 @@ ImageArmhf:
     DOCKER_HOST: tcp://docker:2375/
     LATEST_TAG: $CI_REGISTRY_IMAGE/armhf:latest
     IMAGE_TAG: $CI_REGISTRY_IMAGE/armhf:$CI_COMMIT_TAG
-    GIT_STRATEGY: none
   services:
     - name: arm32v7/docker:dind
       alias: docker
