@@ -19,7 +19,7 @@ class client {
 	static sock_ptr connect();
 
 public:
-	client(ekutils::epoll_d & poll) : client(poll, connect()) {}
+	explicit client(ekutils::epoll_d & poll) : client(poll, connect()) {}
 
 private:
 	client(ekutils::epoll_d & poll, sock_ptr && sock);
