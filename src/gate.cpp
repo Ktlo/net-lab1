@@ -19,12 +19,6 @@ bool gate::head(std::int32_t & id, std::int32_t & size) const {
 	return std::size_t(size) <= input.size();
 }
 
-void gate::tunnel(gate & other) {
-	other.output.append(input.data(), input.size());
-	input.clear();
-	other.send();
-}
-
 void gate::receive() {
 	std::size_t avail = sock->avail();
 	std::size_t old = input.size();

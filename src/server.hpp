@@ -19,7 +19,7 @@ class server final {
 	std::list<connection> connections;
 
 public:
-	server(ekutils::epoll_d & poll);
+	explicit server(ekutils::epoll_d & poll);
 	void broadcast(const std::string & username, const std::string & message);
 	std::size_t there(const std::string & username) const;
 	ekutils::epoll_d & poll() noexcept {

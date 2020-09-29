@@ -26,7 +26,6 @@ public:
 	bool paket_read(P & packet);
 	template <typename P>
 	void paket_write(const P & packet);
-	void tunnel(gate & other);
 	void receive();
 	void send();
 	std::size_t avail_read() const noexcept {
