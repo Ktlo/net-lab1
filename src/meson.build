@@ -1,9 +1,15 @@
 sources = files([
   'client.cpp',
+  'client_shared.cpp',
+  'client_sync.cpp',
   'connection.cpp',
+  'connection_sync.cpp',
   'gate.cpp',
+  'protocol.cpp',
   'server.cpp',
-  'settings.cpp'
+  'server_sync.cpp',
+  'settings.cpp',
+  'tunnel.cpp'
 ])
 
 src = include_directories('.')

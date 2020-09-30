@@ -20,6 +20,7 @@ struct settings_t {
 	bool single_login = false;
 	bool version = false;
 	bool help = false;
+	bool sync = false;
 
 	ekutils::log_level verb = ekutils::log_level::info;
 	

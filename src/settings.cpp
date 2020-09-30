@@ -68,6 +68,8 @@ void settings_t::parse_args(int argn, const char ** args) {
 				help = true;
 			else if (is_arg_name(arg, "verb"))
 				verb = ekutils::str2loglvl(get_arg_value(it, end));
+			else if (is_arg_name(arg, "sync"))
+				sync = true;
 			else
 				throw std::invalid_argument("urecognized argument '" + std::string(arg) + "'");
 		} else if (*curr == '-') {
@@ -86,6 +88,8 @@ void settings_t::parse_args(int argn, const char ** args) {
 					help = true;
 				else if (c == 'd')
 					verb = ekutils::log_level::debug;
+				else if (c == 'S')
+					sync = true;
 				else
 					throw std::invalid_argument(std::string("unrecognized option '") + c + "'");
 			}

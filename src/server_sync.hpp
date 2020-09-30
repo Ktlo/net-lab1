@@ -1,30 +1,28 @@
-#ifndef CHAT_SERVER_HEAD_QEDFEPOBGHMNYG
-#define CHAT_SERVER_HEAD_QEDFEPOBGHMNYG
+#ifndef CHAT_SERVER_SYNC_HEAD_QEDFEPOBGHMNYG
+#define CHAT_SERVER_SYNC_HEAD_QEDFEPOBGHMNYG
 
 #include <list>
 #include <memory>
+#include <shared_mutex>
 
 #include <ekutils/listener_socket_d.hpp>
-#include <ekutils/epoll_d.hpp>
 
-#include "connection.hpp"
+#include "connection_sync.hpp"
 
 namespace ktlo::chat {
 
 typedef std::unique_ptr<ekutils::listener_socket_d> listener_ptr;
 
-class server final {
-	ekutils::epoll_d & epoll;
+class server_sync final {
 	listener_ptr sock;
-	std::list<connection> connections;
+	std::list<connection_sync> connections;
+	mutable std::shared_mutex connections_mutex;
 
 public:
-	explicit server(ekutils::epoll_d & poll);
+	server_sync();
 	void broadcast(const std::string & username, std::string && message);
 	std::size_t there(const std::string & username) const;
-	ekutils::epoll_d & poll() noexcept {
-		return epoll;
-	}
+	void forget(connection_sync & connection);
 
 private:
 	void on_accept();
@@ -33,4 +31,4 @@ private:
 
 } // namespace ktlo::chat
 
-#endif // CHAT_SERVER_HEAD_QEDFEPOBGHMNYG
+#endif // CHAT_SERVER_SYNC_HEAD_QEDFEPOBGHMNYG

@@ -1,6 +1,9 @@
 #include <iostream>
 
+#include <signal.h>
+
 #include "server.hpp"
+#include "server_sync.hpp"
 #include "settings.hpp"
 #include "resources.hpp"
 #include "config.hpp"
@@ -25,10 +28,15 @@ int main(int argc, char *argv[]) {
 		}
         delete ekutils::log;
         ekutils::log = new ekutils::stdout_log(settings.verb);
-        ekutils::epoll_d epoll;
-        server srv(epoll);
-        for (;;)
-            epoll.wait(-1);
+        if (settings.sync) {
+            signal(SIGPIPE, SIG_IGN);
+            server_sync srv;
+        } else {
+            ekutils::epoll_d epoll;
+            server srv(epoll);
+            for (;;)
+                epoll.wait(-1);
+        }
     } catch (const std::exception & e) {
         log_fatal("error: "s + e.what());
         return EXIT_FAILURE;

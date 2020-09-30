@@ -1,7 +1,5 @@
 #include "server.hpp"
 
-#include <chrono>
-
 #include <ekutils/tcp_d.hpp>
 #include <ekutils/unix_d.hpp>
 
@@ -29,16 +27,8 @@ server::server(ekutils::epoll_d & poll) : epoll(poll) {
 	});
 }
 
-void server::broadcast(const std::string & username, const std::string & message) {
-	using namespace std::chrono;
-	auto time = system_clock::now();
-	std::int64_t epoch = duration_cast<seconds>(time.time_since_epoch()).count();
-	log_verbose("chat: [" + username + "] " + message);
-
-	protocol::chat chat;
-	chat.time() = epoch;
-	chat.username() = username;
-	chat.message() = message;
+void server::broadcast(const std::string & username, std::string && message) {
+	protocol::chat chat = protocol::chat::create(username, std::move(message));
 
 	for (connection & client : connections)
 		client.send(chat);

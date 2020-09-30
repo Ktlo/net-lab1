@@ -6,6 +6,7 @@
 
 #include "settings.hpp"
 #include "server.hpp"
+#include "bad_request.hpp"
 
 namespace ktlo::chat {
 
@@ -94,7 +95,7 @@ bool connection::process_chatting() {
 	}
 	protocol::tell tell;
 	precv(tell);
-	srv.broadcast(user, tell.message());
+	srv.broadcast(user, std::move(tell.message()));
 	return true;
 }
 

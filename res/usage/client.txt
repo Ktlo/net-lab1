@@ -6,6 +6,7 @@ Options:
       --port PORT          tcp port (tcp only)
       --username USERNAME  own username for chat
       --pulse PULSE        keep alive signal period in milliseconds
+  -S, --sync                    use threads and blocking code
   -t, --tcp                use tcp socket
   -u, --unix               use unix socket
   -v, --version            show program version
