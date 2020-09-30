@@ -1,5 +1,5 @@
-#ifndef CHAT_GATE_HEAD_PQOVKTKBGFVFSK
-#define CHAT_GATE_HEAD_PQOVKTKBGFVFSK
+#ifndef CHAT_TUNNEL_HEAD_REGERGREKFEPB
+#define CHAT_TUNNEL_HEAD_REGERGREKFEPB
 
 #include <memory>
 
@@ -11,34 +11,25 @@
 
 namespace ktlo::chat {
 
-class gate {
+class tunnel final {
 	sock_ptr sock;
 	ekutils::expandbuff input, output;
 public:
-	explicit gate(sock_ptr && socket) : sock(std::move(socket)) {}
-	bool head(std::int32_t & id, std::int32_t & size) const;
+	explicit tunnel(sock_ptr && socket) : sock(std::move(socket)) {}
+	void head(std::int32_t & id, std::int32_t & size);
 	template <typename P>
 	bool paket_read(P & packet);
 	template <typename P>
 	void paket_write(const P & packet);
-	void receive();
-	void send();
-	std::size_t avail_read() const noexcept {
-		return input.size();
-	}
-	std::size_t avail_write() const noexcept {
-		return output.size();
-	}
 	ekutils::stream_socket_d & socket() noexcept {
 		return *sock;
 	}
 };
 
 template <typename P>
-bool gate::paket_read(P & packet) {
+bool tunnel::paket_read(P & packet) {
 	std::int32_t id, size;
-	if (!head(id, size))
-		return false;
+	head(id, size);
 	int s = packet.read(input.data(), size);
 	if (std::int32_t(s) != size)
 		throw bad_request("packet format error " + std::to_string(s) + " " + std::to_string(size));
@@ -47,18 +38,17 @@ bool gate::paket_read(P & packet) {
 }
 
 template <typename P>
-void gate::paket_write(const P & packet) {
+void tunnel::paket_write(const P & packet) {
 	std::size_t size = 10 + packet.size();
-	output.asize(size);
+	output.size(size);
 	int s = packet.write(output.data() + output.size() - size, size);
 #	ifdef DEBUG
 		if (s < 0)
 			throw "IMPOSSIBLE SITUATION";
 #	endif
-	output.ssize(size - s);
-	send(); // init transmission
+	sock->write(output.data(), s);
 }
 
 } // namespace ktlo::chat
 
-#endif // CHAT_GATE_HEAD_PQOVKTKBGFVFSK
+#endif // CHAT_TUNNEL_HEAD_REGERGREKFEPB

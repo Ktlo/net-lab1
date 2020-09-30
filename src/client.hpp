@@ -7,6 +7,7 @@
 #include <ekutils/timer_d.hpp>
 
 #include "gate.hpp"
+#include "client_shared.hpp"
 
 namespace ktlo::chat {
 
@@ -16,10 +17,8 @@ class client {
 	gate tube;
 	ekutils::timer_d timer;
 
-	static sock_ptr connect();
-
 public:
-	explicit client(ekutils::epoll_d & poll) : client(poll, connect()) {}
+	explicit client(ekutils::epoll_d & poll) : client(poll, connect_client()) {}
 
 private:
 	client(ekutils::epoll_d & poll, sock_ptr && sock);

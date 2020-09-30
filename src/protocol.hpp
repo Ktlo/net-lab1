@@ -39,6 +39,8 @@ struct chat : public paket<ids::chat, fields::int64, fields::string, fields::str
 	fname(time, 0)
 	fname(username, 1)
 	fname(message, 2)
+
+	static chat create(const std::string & username, std::string && message);
 };
 
 } // ktlo::chat::protocol

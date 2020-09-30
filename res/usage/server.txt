@@ -9,6 +9,7 @@ Options:
       --timeout MILLIS          timeout in milliseconds for any actions
                                 from client
   -s, --single-login            only one client with the same name can
+  -S, --sync                    use threads and blocking code
                                 login
       --verb LEVEL              logging level: (none, fatal, error,
                                 warning, info, verbose, debug)

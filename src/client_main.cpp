@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "client.hpp"
+#include "client_sync.hpp"
 #include "settings.hpp"
 #include "resources.hpp"
 #include "config.hpp"
@@ -21,10 +22,14 @@ int main(int argc, char ** argv) {
 			std::cout << config::version << std::endl;
 			return EXIT_SUCCESS;
 		}
-		ekutils::epoll_d epoll;
-		client c(epoll);
-		for (;;)
-			epoll.wait(-1);
+		if (settings.sync) {
+			client_sync c;
+		} else {
+			ekutils::epoll_d epoll;
+			client c(epoll);
+			for (;;)
+				epoll.wait(-1);
+		}
 	} catch (const std::invalid_argument & e) {
 		std::cerr << e.what() << std::endl;
 		print_usage(std::cerr, argv[0]);
